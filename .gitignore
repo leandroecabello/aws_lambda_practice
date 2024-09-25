@@ -1,0 +1,25 @@
+# Node modules directory
+node_modules/
+
+# Log files
+*.log
+
+# Runtime data
+*.pid
+*.seed
+
+# Dependency directories
+.npm/
+.cache/
+.yarn/
+
+# IDE and editor folders
+.vscode/
+.idea/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Environment variables file
+.env

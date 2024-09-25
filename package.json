@@ -1,0 +1,15 @@
+{
+  "name": "aws-lambda-practice",
+  "version": "1.0.0",
+  "description": "Este monorepo está diseñado para ayudar a practicar y documentar mis conocimientos sobre AWS Lambda, Node.js, MongoDB, y el desarrollo de microservicios en la nube.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.1677.0"
+  }
+}

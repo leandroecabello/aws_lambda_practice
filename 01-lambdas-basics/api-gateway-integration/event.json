@@ -1,0 +1,21 @@
+{
+    "resource": "/{proxy+}",
+    "path": "/example/path",
+    "httpMethod": "GET",
+    "headers": {
+      "Accept": "application/json",
+      "Authorization": "Bearer example-token",
+      "Content-Type": "application/json"
+    },
+    "queryStringParameters": {
+      "name": "JohnDoe"
+    },
+    "pathParameters": {
+      "proxy": "example/path"
+    },
+    "stageVariables": {
+      "stageName": "dev"
+    },
+    "body": null,
+    "isBase64Encoded": false
+  }
