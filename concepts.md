@@ -1,10 +1,8 @@
 ## Serverless con AWS - Conceptos
 
-🤔 ### **¿Qué es Serverless?** 
+### 🤔 **¿Qué es Serverless?** 
 
 >  *Serverless es una forma de ejecutar servicios en la nube sin necesidad de administrar servidores. En lugar de mantener una infraestructura activa todo el tiempo, las funciones o servicios se ejecutan solo cuando ocurre un evento, lo que permite escalar automáticamente y pagar únicamente por lo que se utiliza. Es ideal para arquitecturas orientadas a eventos y microservicios.* 
-
----
 
 ## ✅ Conceptos a tener en cuenta
 
