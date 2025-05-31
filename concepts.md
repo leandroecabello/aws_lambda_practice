@@ -17,6 +17,22 @@
 
     >💡 *Una Lambda permite ejecutar lógica de backend sin preocuparnos por servidores. Es ideal para eventos puntuales y escalabilidad automática.*
 
+#### Mermaid
+```mermaid
+sequenceDiagram
+    participant Evento
+    participant Lambda
+    participant Servicio
+
+    Evento->>Lambda: Dispara función Lambda
+    Lambda->>Servicio: Ejecuta lógica
+    Servicio-->>Lambda: Respuesta
+    Lambda-->>Evento: Resultado
+```
+
+#### Diagrama
+![Diagrama_Lambda](./assets/diagrams/lambda-flow.png)
+
 ### 2. API Gateway
 
 - **Qué es**: Servicio para exponer Lambdas como endpoints HTTP.
@@ -25,6 +41,25 @@
 - **Ejemplo**: Recibir una petición HTTP → API Gateway valida y redirige a una Lambda.
 
     >💡 *API Gateway permite crear APIs seguras y escalables, conectando fácilmente clientes HTTP con funciones Lambda.*
+
+#### Mermaid
+
+```mermaid
+sequenceDiagram
+    participant Usuario as Usuario (cliente web o móvil)
+    participant APIGW as API Gateway
+    participant Lambda as AWS Lambda
+    participant DB as DynamoDB
+
+    Usuario->>APIGW: Solicitud HTTP (GET / POST / etc.)
+    APIGW->>Lambda: Invocar función Lambda
+    Lambda->>DB: Leer / escribir datos
+    DB-->>Lambda: Respuesta de la base
+    Lambda-->>APIGW: Resultado de la lógica
+    APIGW-->>Usuario: Respuesta HTTP final
+```
+#### Diagrama
+![Diagrama_API_Gateway](./assets/diagrams/api_gateway.png)
 
 ### 3. SQS (Simple Queue Service)
 
@@ -35,6 +70,40 @@
 
     >💡 *SQS ayuda a desacoplar servicios y manejar cargas variables, asegurando que las tareas se procesen sin perder mensajes.*
 
+#### Mermaid
+```mermaid
+sequenceDiagram
+    participant Producer as Servicio productor
+    participant SQS as AWS SQS
+    participant Lambda as AWS Lambda (consumidor)
+    participant Service as Servicio externo (ej. DynamoDB)
+
+    Producer->>SQS: Enviar mensaje
+    SQS->>Lambda: Disparar función por nuevo mensaje
+    Lambda->>Service: Procesar mensaje (guardar, notificar, etc.)
+    Service-->>Lambda: Respuesta (opcional)
+```
+```mermaid
+sequenceDiagram
+    participant Producer as Servicio productor
+    participant SQS as AWS SQS (FIFO)
+    participant Lambda as AWS Lambda (consumidor)
+    participant Service as Servicio externo (ej. DynamoDB)
+
+    Producer->>SQS: Enviar mensaje (con MessageGroupId y DeduplicationId)
+    Note right of SQS: Garantiza orden y evita duplicados
+    SQS->>Lambda: Disparar función en orden por grupo
+    Lambda->>Service: Procesar mensaje
+    Service-->>Lambda: Respuesta (opcional)
+```
+#### Diagrama
+##### a. SQS Standard
+![Diagrama_SQS_Standard](./assets/diagrams/sqs_standar.png)
+
+##### b. SQS FIFO
+![Diagrama_SQS_FIFO](./assets/diagrams/sqs_fifo.png)
+
+
 ### 4. SNS (Simple Notification Service)
 
 - **Qué es**: Sistema pub/sub para notificaciones.
@@ -43,6 +112,23 @@
 - **Ejemplo**: Evento importante → SNS notifica por email y dispara una Lambda en paralelo.
 
     >💡 *SNS permite notificar múltiples sistemas ante un mismo evento, facilitando la comunicación y el broadcast de mensajes.*
+
+#### Mermaid
+```mermaid
+sequenceDiagram
+    participant Publisher as Servicio publicador
+    participant SNS as SNS Topic
+    participant Lambda1 as Lambda A (suscriptor)
+    participant SQS as SQS (suscriptor)
+    participant Email as Email (notificación)
+
+    Publisher->>SNS: Publicar mensaje
+    SNS->>Lambda1: Entregar mensaje (ejecutar Lambda)
+    SNS->>SQS: Encolar mensaje
+    SNS->>Email: Enviar notificación por email
+```
+#### Diagrama
+![Diagrama_SNS](./assets/diagrams/sns.png)
 
 ### 5. Step Functions
 
@@ -53,6 +139,30 @@
 
     >💡 *Step Functions permiten definir procesos complejos entre Lambdas, separando la lógica de control y facilitando la orquestación.*
 
+#### Mermaid
+```mermaid
+sequenceDiagram
+    participant StepFunc as Step Function
+    participant Lambda1 as Lambda: Validar datos
+    participant Lambda2 as Lambda: Guardar en DB
+    participant Lambda3 as Lambda: Notificar
+
+    StepFunc->>Lambda1: Ejecutar paso 1 (Validar datos)
+    Lambda1-->>StepFunc: Resultado validación
+
+    alt Datos válidos
+        StepFunc->>Lambda2: Ejecutar paso 2 (Guardar en DB)
+        Lambda2-->>StepFunc: Resultado guardado
+
+        StepFunc->>Lambda3: Ejecutar paso 3 (Enviar notificación)
+        Lambda3-->>StepFunc: OK
+    else Datos inválidos
+        StepFunc-->>StepFunc: Finaliza con error
+    end
+```
+#### Diagrama
+![Diagrama_Step_function](./assets/diagrams/step_function.png)
+
 ### 6. DynamoDB
 
 - **Qué es**: Base de datos NoSQL totalmente gestionada.
@@ -62,6 +172,21 @@
 
     >💡 *DynamoDB es ideal cuando se necesita velocidad y escalabilidad, con una estructura simple de datos y sin preocuparse por la administración de la base.*
 
+#### Mermaid
+```mermaid
+sequenceDiagram
+    participant Cliente as Cliente (API Gateway o evento)
+    participant Lambda as AWS Lambda
+    participant DynamoDB as DynamoDB
+
+    Cliente->>Lambda: Invocar función Lambda
+    Lambda->>DynamoDB: Leer / Escribir datos
+    DynamoDB-->>Lambda: Resultado operación
+    Lambda-->>Cliente: Respuesta procesada
+```
+#### Diagrama
+![Diagrama_Dynamo](./assets/diagrams/dynamo_db.png)
+
 ### 7. Serverless Framework
 
 - **Qué es**: Framework de infraestructura como código para desplegar servicios serverless en AWS y otros proveedores.
@@ -70,6 +195,24 @@
 - **Ejemplo**: Definir funciones Lambda y recursos en YAML → Desplegar todo con un solo comando.
 
     >💡 *Serverless Framework permite definir y desplegar infraestructura y funciones serverless de forma sencilla y repetible, facilitando la automatización y el versionado.*
+
+#### Mermaid
+```mermaid
+sequenceDiagram
+    participant Dev as Desarrollador
+    participant SLS as Serverless Framework CLI
+    participant CFN as AWS CloudFormation
+    participant AWS as Servicios AWS (Lambda, API Gateway, etc.)
+
+    Dev->>SLS: sls deploy
+    SLS->>CFN: Genera y envía plantilla YAML
+    CFN->>AWS: Provisiona recursos declarados
+    AWS-->>CFN: Confirmación de creación
+    CFN-->>SLS: Stack creado / actualizado
+    SLS-->>Dev: Resultado del despliegue
+```
+#### Diagrama
+![Diagrama_Serverless_Framework](./assets/diagrams/serverless_framework.png)
 
 ### 8. AWS CloudFormation
 
@@ -81,6 +224,22 @@
     >💡 *CloudFormation permite gestionar toda la infraestructura AWS como código, garantizando reproducibilidad y trazabilidad de cambios.*
 
     >ℹ️ *Dato adicional: AWS CDK (Cloud Development Kit) permite escribir esa infraestructura como código usando lenguajes como TypeScript o Python. El CDK genera plantillas de CloudFormation por debajo*
+
+#### Mermaid
+```mermaid
+sequenceDiagram
+    participant Cliente as Cliente (API Gateway o evento)
+    participant Lambda as AWS Lambda
+    participant DynamoDB as DynamoDB
+
+    Cliente->>Lambda: Invocar función Lambda
+    Lambda->>DynamoDB: Leer / Escribir datos
+    DynamoDB-->>Lambda: Resultado operación
+    Lambda-->>Cliente: Respuesta procesada
+```
+#### Diagrama
+![Diagrama_Cloud_Formation](./assets/diagrams/cloud_formation.png)
+
 ---
 
 ### 🆚 Comparación entre Serverless Framework y CloudFormatio : 
