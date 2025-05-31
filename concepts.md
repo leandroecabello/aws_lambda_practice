@@ -15,7 +15,7 @@
 
     >💡 *Una Lambda permite ejecutar lógica de backend sin preocuparnos por servidores. Es ideal para eventos puntuales y escalabilidad automática.*
 
-#### Mermaid
+#### Diagrama
 ```mermaid
 sequenceDiagram
     participant Evento
@@ -27,8 +27,6 @@ sequenceDiagram
     Servicio-->>Lambda: Respuesta
     Lambda-->>Evento: Resultado
 ```
-
-#### Diagrama
 ![Diagrama_Lambda](./assets/diagrams/lambda-flow.png)
 
 ### 2. API Gateway
@@ -39,9 +37,7 @@ sequenceDiagram
 - **Ejemplo**: Recibir una petición HTTP → API Gateway valida y redirige a una Lambda.
 
     >💡 *API Gateway permite crear APIs seguras y escalables, conectando fácilmente clientes HTTP con funciones Lambda.*
-
-#### Mermaid
-
+#### Diagrama
 ```mermaid
 sequenceDiagram
     participant Usuario as Usuario (cliente web o móvil)
@@ -56,7 +52,6 @@ sequenceDiagram
     Lambda-->>APIGW: Resultado de la lógica
     APIGW-->>Usuario: Respuesta HTTP final
 ```
-#### Diagrama
 ![Diagrama_API_Gateway](./assets/diagrams/api_gateway.png)
 
 ### 3. SQS (Simple Queue Service)
@@ -68,7 +63,8 @@ sequenceDiagram
 
     >💡 *SQS ayuda a desacoplar servicios y manejar cargas variables, asegurando que las tareas se procesen sin perder mensajes.*
 
-#### Mermaid
+#### Diagrama
+##### a. SQS Standard
 ```mermaid
 sequenceDiagram
     participant Producer as Servicio productor
@@ -81,6 +77,8 @@ sequenceDiagram
     Lambda->>Service: Procesar mensaje (guardar, notificar, etc.)
     Service-->>Lambda: Respuesta (opcional)
 ```
+![Diagrama_SQS_Standard](./assets/diagrams/sqs_standar.png)
+##### b. SQS FIFO
 ```mermaid
 sequenceDiagram
     participant Producer as Servicio productor
@@ -94,14 +92,7 @@ sequenceDiagram
     Lambda->>Service: Procesar mensaje
     Service-->>Lambda: Respuesta (opcional)
 ```
-#### Diagrama
-##### a. SQS Standard
-![Diagrama_SQS_Standard](./assets/diagrams/sqs_standar.png)
-
-##### b. SQS FIFO
 ![Diagrama_SQS_FIFO](./assets/diagrams/sqs_fifo.png)
-
-
 ### 4. SNS (Simple Notification Service)
 
 - **Qué es**: Sistema pub/sub para notificaciones.
@@ -111,7 +102,7 @@ sequenceDiagram
 
     >💡 *SNS permite notificar múltiples sistemas ante un mismo evento, facilitando la comunicación y el broadcast de mensajes.*
 
-#### Mermaid
+#### Diagrama
 ```mermaid
 sequenceDiagram
     participant Publisher as Servicio publicador
@@ -125,7 +116,6 @@ sequenceDiagram
     SNS->>SQS: Encolar mensaje
     SNS->>Email: Enviar notificación por email
 ```
-#### Diagrama
 ![Diagrama_SNS](./assets/diagrams/sns.png)
 
 ### 5. Step Functions
@@ -137,7 +127,7 @@ sequenceDiagram
 
     >💡 *Step Functions permiten definir procesos complejos entre Lambdas, separando la lógica de control y facilitando la orquestación.*
 
-#### Mermaid
+#### Diagrama
 ```mermaid
 sequenceDiagram
     participant StepFunc as Step Function
@@ -158,7 +148,6 @@ sequenceDiagram
         StepFunc-->>StepFunc: Finaliza con error
     end
 ```
-#### Diagrama
 ![Diagrama_Step_function](./assets/diagrams/step_function.png)
 
 ### 6. DynamoDB
@@ -170,7 +159,7 @@ sequenceDiagram
 
     >💡 *DynamoDB es ideal cuando se necesita velocidad y escalabilidad, con una estructura simple de datos y sin preocuparse por la administración de la base.*
 
-#### Mermaid
+#### Diagrama
 ```mermaid
 sequenceDiagram
     participant Cliente as Cliente (API Gateway o evento)
@@ -182,7 +171,6 @@ sequenceDiagram
     DynamoDB-->>Lambda: Resultado operación
     Lambda-->>Cliente: Respuesta procesada
 ```
-#### Diagrama
 ![Diagrama_Dynamo](./assets/diagrams/dynamo_db.png)
 
 ### 7. Serverless Framework
@@ -194,7 +182,7 @@ sequenceDiagram
 
     >💡 *Serverless Framework permite definir y desplegar infraestructura y funciones serverless de forma sencilla y repetible, facilitando la automatización y el versionado.*
 
-#### Mermaid
+#### Diagrama
 ```mermaid
 sequenceDiagram
     participant Dev as Desarrollador
@@ -209,7 +197,6 @@ sequenceDiagram
     CFN-->>SLS: Stack creado / actualizado
     SLS-->>Dev: Resultado del despliegue
 ```
-#### Diagrama
 ![Diagrama_Serverless_Framework](./assets/diagrams/serverless_framework.png)
 
 ### 8. AWS CloudFormation
@@ -223,7 +210,7 @@ sequenceDiagram
 
     >ℹ️ *Dato adicional: AWS CDK (Cloud Development Kit) permite escribir esa infraestructura como código usando lenguajes como TypeScript o Python. El CDK genera plantillas de CloudFormation por debajo*
 
-#### Mermaid
+#### Diagrama
 ```mermaid
 sequenceDiagram
     participant Cliente as Cliente (API Gateway o evento)
@@ -235,7 +222,6 @@ sequenceDiagram
     DynamoDB-->>Lambda: Resultado operación
     Lambda-->>Cliente: Respuesta procesada
 ```
-#### Diagrama
 ![Diagrama_Cloud_Formation](./assets/diagrams/cloud_formation.png)
 
 ---
